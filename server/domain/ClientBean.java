@@ -1,7 +1,7 @@
 package socket.server.domain;
 
 import java.net.Socket;
-//import com.google.gson.Gson;
+
 
 public class ClientBean {
 	private String ip;

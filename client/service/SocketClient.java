@@ -7,11 +7,14 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+import socket.client.domain.SystemManager;
+
 public class SocketClient {
 	public static void main(String[] args)
 	{	
 		
 		SystemManager systemManager = new SystemManager();
+		systemManager.createThread();
 		
 		while (true) {
 			
@@ -29,7 +32,6 @@ public class SocketClient {
 				PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
 				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				
-					
 				while(true)
 				{
 					try {
@@ -48,8 +50,8 @@ public class SocketClient {
 					catch (SocketTimeoutException e) {
 						// 连接超时
 						System.out.println("connect ok");
-						String transToServer = "memory: "+systemManager.getMemory() + " threads: " + systemManager.getThreads();
-						
+						//String transToServer = "memory: "+systemManager.getMemory() + " threads: " + systemManager.getThreads();
+						String transToServer = systemManager.toJsonString();
 						System.out.println(transToServer);
 						printWriter.println(transToServer);
 					}

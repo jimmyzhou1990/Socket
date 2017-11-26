@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.StringTokenizer;
+import socket.client.domain.SystemManager;
 
 
 public class ClientRunnable implements Runnable{
@@ -44,7 +44,7 @@ public class ClientRunnable implements Runnable{
 	
 	public void parseClientResponse(String response) {
 		
-		String[] standard = {"memory:", "0%", "threads:", "0"};
+		/*String[] standard = {"memory:", "0%", "threads:", "0"};
 		String[] info = {"", "", "", ""};
 		int i = 0;
 		
@@ -59,6 +59,12 @@ public class ClientRunnable implements Runnable{
         	
 		myself.setMemory(info[1]);
 		myself.setThreads(info[3]);
+		myself.setConnect("online");*/
+		
+		SystemManager systemManager = SystemManager.fromJsonString(response);
+		
+		myself.setMemory(systemManager.getMemory());
+		myself.setThreads(systemManager.getThreads());
 		myself.setConnect("online");
 	}
 	

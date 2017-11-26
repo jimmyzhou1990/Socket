@@ -30,7 +30,7 @@ public class SocketServer {
 					String clientIP = socket.getInetAddress().toString().substring(1);
 					
 					//如果client正在被管理则创建,否则拒绝连接
-					if (clientsManager.isClientAdded(clientIP))
+					if (clientsManager.shouldAdd(clientIP))
 					{
 						clientsManager.createConnectThread(clientIP, socket);
 					}

@@ -72,6 +72,10 @@ public class WebServerRunnable implements Runnable{
 						System.out.println("IOException: read from webserver!");
 						break;
 					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
 						
 				}
 					

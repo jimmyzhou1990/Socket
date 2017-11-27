@@ -16,8 +16,9 @@ public class ClientBean {
 		super();
 		this.ip = ip;
 		this.connect = "offline";
-		this.memory = "";
-		this.threads = "";
+		this.memory = "unknown";
+		this.threads = "unknown";
+		this.clientRunnable = null;
 	}
 	
 	public void createThread(Socket socket) {
@@ -26,7 +27,10 @@ public class ClientBean {
 	}
 	
 	public void closeThread() {
-		clientRunnable.close();
+		if (clientRunnable != null)
+		{
+			clientRunnable.close();
+		}
 	}
 	
 	public String getIp() {

@@ -43,24 +43,7 @@ public class ClientRunnable implements Runnable{
 	}
 	
 	public void parseClientResponse(String response) {
-		
-		/*String[] standard = {"memory:", "0%", "threads:", "0"};
-		String[] info = {"", "", "", ""};
-		int i = 0;
-		
-		StringTokenizer st = new StringTokenizer(response, " "); 
-		
-        while(st.hasMoreElements()) {  
-        	info[i++] = st.nextElement().toString();
-        	if (i >= 4)    break;  //只接受4个字段
-        } 
-        
-        if (i != 4 || !(info[0].equals(standard[0]))  || !(info[2].equals(standard[2]))) return;
-        	
-		myself.setMemory(info[1]);
-		myself.setThreads(info[3]);
-		myself.setConnect("online");*/
-		
+	
 		SystemManager systemManager = SystemManager.fromJsonString(response);
 		
 		myself.setMemory(systemManager.getMemory());

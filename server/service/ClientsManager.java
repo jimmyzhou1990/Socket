@@ -45,7 +45,7 @@ public class ClientsManager {
 	//返回client对象
 	private ClientBean getClient(String clientIP) {
 		
-		ClientBean client = null;
+		ClientBean client;
 		
 		
 		for(Iterator<ClientBean> iter = Clients.iterator(); iter.hasNext();)
@@ -53,11 +53,11 @@ public class ClientsManager {
 			client = (ClientBean)iter.next();
 			if (client.getIp().equals(clientIP))
 			{
-				break;
+				return client;
 			}
 		}
 		
-		return client;
+		return null;
 	}
 	
 	
@@ -88,7 +88,7 @@ public class ClientsManager {
 		}
 	}
 	
-	//删除客户端,仅不再管理客户端,连接可能仍然存在
+	//删除客户端, 关闭线程
 	public void removeClient(String clientIP)
 	{
 		ClientBean client = getClient(clientIP);

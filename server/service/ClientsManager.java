@@ -5,10 +5,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 //import java.util.concurrent.locks.Lock;
 //import java.util.concurrent.locks.ReentrantLock;
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.google.gson.Gson;
 
+import socket.server.dao.ClientBeanDao;
 import socket.server.domain.ClientBean;
+import socket.server.utils.HibernateUtils;
 
 
 
@@ -20,7 +26,10 @@ public class ClientsManager {
 	public ClientsManager() {
 		super();
 		Clients = new LinkedList<ClientBean>();
-		//lock = new ReentrantLock();
+		initfromDatabase();
+		
+		//ClientsManagerRunnable runnable = new ClientsManagerRunnable(this);
+		//new Thread(runnable).start();
 	}
 
 	//判断客户端是否被管理
@@ -70,9 +79,10 @@ public class ClientsManager {
 		}
 		else
 		{
-			ClientBean c = new ClientBean(clientIP);
+			ClientBean client = new ClientBean(clientIP);
 			System.out.println("add client <" + clientIP + ">");
-			Clients.add(c);
+			Clients.add(client);
+			client.saveToDatabase();
 			return true;
 		}
 	}
@@ -95,6 +105,7 @@ public class ClientsManager {
 		
 		if (client != null)
 		{
+			client.removeFromDatabase();
 			client.closeThread();     //关闭线程
 			Clients.remove(client);   //删除管理
 		}
@@ -123,6 +134,23 @@ public class ClientsManager {
 		jsonString = gson.toJson(Clients);
 		
 		return jsonString;
+	}
+	
+	//从数据库初始化
+	public void initfromDatabase() {
+		Session session = HibernateUtils.openCurrentSession();
+		Transaction tx = session.beginTransaction();
+		
+		List<ClientBean> clientList = ClientBeanDao.getAll();
+		
+		for(Iterator<ClientBean> iter = clientList.iterator(); iter.hasNext();)
+		{
+			ClientBean c = (ClientBean)iter.next();//从数据库读取的对象
+			ClientBean client = new ClientBean(c.getIp()); //新建对象
+			Clients.add(client);  //添加到管理
+		}
+		
+		tx.commit();
 	}
 	
 }

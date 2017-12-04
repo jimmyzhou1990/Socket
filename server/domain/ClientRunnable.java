@@ -33,6 +33,8 @@ public class ClientRunnable implements Runnable{
 		myself.setMemory("unknown");
 		myself.setThreads("unknown");
 		
+		myself.saveToDatabase();
+		
 		try {
 			printWriter.close();
 			bufferedReader.close();
@@ -46,9 +48,16 @@ public class ClientRunnable implements Runnable{
 	
 		SystemManager systemManager = SystemManager.fromJsonString(response);
 		
-		myself.setMemory(systemManager.getMemory());
-		myself.setThreads(systemManager.getThreads());
-		myself.setConnect("online");
+		if (!(myself.getMemory().equals(systemManager.getMemory())) ||
+			!(myself.getThreads().equals(systemManager.getThreads())) ||
+			myself.getConnect().equals("offline")
+			)
+		{
+			myself.setMemory(systemManager.getMemory());
+			myself.setThreads(systemManager.getThreads());
+			myself.setConnect("online");
+			myself.saveToDatabase();
+		}
 	}
 	
 	public void run() {
